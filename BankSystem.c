@@ -20,6 +20,74 @@ struct Node *Head = NULL ;
 
 /* ====================== [Section: Helper Functions] ====================== */
 
+/* ------------- [Colors Functions Start] ------------- */
+/**
+  * @brief  :   Function to Change Text color on CMD to RED
+  * @param  :   No Input Parameter
+  * @retval :   No Return
+  */
+void ChangeTxtToRED (void)
+{
+    printf("\033[0;31m");
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Change Text color on CMD to YELLOW 
+  * @param  :   No Input Parameter
+  * @retval :   No Return
+  */
+void ChangeTxtToYELLOW (void)
+{
+    printf("\033[0;33m");
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Change Text color on CMD to BLACK
+  * @param  :   No Input Parameter
+  * @retval :   No Return
+  */
+void ChangeTxtToBLACK (void)
+{
+    printf("\033[0;30m");
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Change Text color on CMD to GREEN
+  * @param  :   No Input Parameter
+  * @retval :   No Return
+  */
+void ChangeTxtToGREEN (void)
+{
+    printf("\033[0;32m");
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Change Text color on CMD to BLUE
+  * @param  :   No Input Parameter
+  * @retval :   No Return
+  */
+void ChangeTxtToBLUE (void)
+{
+    printf("\e[1;96m");
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Change Text color on CMD to Original
+  * @param  :   No Input Parameter
+  * @retval :   No Return
+  */
+void ResetTxtColor (void)
+{
+    printf("\033[0m");
+}
+/* ================================ */
+/* ------------- [Colors Functions End] ------------- */
+
 /**
   * @brief  :   Function to Generate Account Password
   * @param  :   No Input
@@ -97,7 +165,7 @@ uint8 CheckID(void)
 
     while (NULL != TempNode)
     {
-        if (!strcmp(TempNode->ID , id))
+        if (0 == strcmp(TempNode->ID , id))
         {
             flag = 1 ;
             break;
@@ -124,7 +192,7 @@ struct Node *CurrentNode(uint8* IDCopy)
 	while(NULL != TempNode)
 	{
 
-		if(!strcmp(TempNode->ID,IDCopy))
+		if(0 == strcmp(TempNode->ID,IDCopy))
 		{
 			flag = 1;
 			return TempNode;
@@ -142,71 +210,74 @@ struct Node *CurrentNode(uint8* IDCopy)
 /* ================================ */
 
 /**
-  * @brief  :   Function to Change Text color on CMD to RED
-  * @param  :   No Input Parameter
-  * @retval :   No Return
+  * @brief  :   Function to Search if Password of Account Found or Not 
+  * @param  :   pointer to the address of the head of the list
+  * @retval :   flag --> Indication if password exisit or not 
   */
-void ChangeTxtToRED (void)
+uint8 IsPassFound(struct Node *Head)
 {
-    printf("\033[0;31m  \n");
+    struct Node *TempNode = Head ;
+    uint8 InPass [20];
+    uint8 flag  = 0;
+
+
+    while (3 > flag)
+    {
+        TempNode = Head ;
+        ChangeTxtToGREEN();
+        printf("\nEnter Password of Your Account : ");
+        scanf("%s" , InPass);
+        fflush(stdin);
+        while (NULL != TempNode)
+        {
+            if (0 == strcmp(TempNode->Pass , InPass))
+            {
+                break ;
+            }
+            else
+            {
+                TempNode = TempNode->NodeLink ;
+            }
+        }
+        if (NULL != TempNode)
+        {
+            ChangeTxtToGREEN();
+            printf("------------- [Welcome Back] ------------- \n\n");
+            Sleep(2000);
+            break;
+        }
+        else
+        {
+            ChangeTxtToRED();
+            printf("Wrong Password !!... Try Again \n");
+            Sleep(2000);
+            flag++;
+        }
+    }
+   return flag ;
 }
 /* ================================ */
 
 /**
-  * @brief  :   Function to Change Text color on CMD to YELLOW 
-  * @param  :   No Input Parameter
-  * @retval :   No Return
+  * @brief  :   Function to Display Password in Stars Form 
+  * @param  :   No Input
+  * @retval :   PassWord Hidden 
   */
-void ChangeTxtToYELLOW (void)
-{
-    printf("\033[0;33m  \n");
-}
+// uint8* StarPassword()
+// {
+// 	uint8 i = 0;
+// 	uint8 ch;
+// 	static uint8 H_Pass[11];
+// 	while ( (ch = _getch()) != 13 )
+// 	{
+// 		H_Pass[i] = ch;
+// 		i++;
+// 		printf("*");
+// 	}
+// 	H_Pass[i] = '\0';	
+// 	return H_Pass;
+// }
 /* ================================ */
-
-/**
-  * @brief  :   Function to Change Text color on CMD to BLACK
-  * @param  :   No Input Parameter
-  * @retval :   No Return
-  */
-void ChangeTxtToBLACK (void)
-{
-    printf("\033[0;30m  \n");
-}
-/* ================================ */
-
-/**
-  * @brief  :   Function to Change Text color on CMD to GREEN
-  * @param  :   No Input Parameter
-  * @retval :   No Return
-  */
-void ChangeTxtToGREEN (void)
-{
-    printf("\033[0;32m  \n");
-}
-/* ================================ */
-
-/**
-  * @brief  :   Function to Change Text color on CMD to BLUE
-  * @param  :   No Input Parameter
-  * @retval :   No Return
-  */
-void ChangeTxtToBLUE (void)
-{
-    printf("\033[0;34m  \n");
-}
-/* ================================ */
-
-/**
-  * @brief  :   Function to Change Text color on CMD to Original
-  * @param  :   No Input Parameter
-  * @retval :   No Return
-  */
-void ResetTxtColor (void)
-{
-    printf("\033[0m  \n");
-}
-/* ================================ */
-
 
 /* ------------------------------------------------------------------------- */
 
@@ -219,67 +290,86 @@ void ResetTxtColor (void)
   */
 void MakeTransaction(struct Node **Head)
 {
-    uint8 flagSrc  = 1;
-    uint8 flagDest = 1;
+    ChangeTxtToYELLOW();
+    uint8 flagSrc  = 0;
+    uint8 flagDest = 0;
     uint32 CashToTransfer ;
-    uint8 _ID[15];
+    uint8 _ID1[15];
+    uint8 _ID2[15];
     struct Node *Src_Node ;
     struct Node *Dest_Node ;
     
-    while (flagSrc != 0)
+    while (flagSrc < 3)
     {
-        printf("\nEnter Bank ID :");
-        scanf("%s" , _ID);
-        Src_Node = CurrentNode(_ID);
+        printf("Enter Bank ID :");
+        scanf("%s" , _ID1);
+        fflush(stdin);
+        Src_Node = CurrentNode(_ID1);
         if (NULL == Src_Node)
         {
+            ChangeTxtToRED();
             printf("Invalid Bank ID ! ... Try Again \n");
+            Sleep(2000);
+            flagSrc++ ;
         }
         else
         {
-            flagSrc = 0 ;
+            flagDest = 0;
+            while (flagDest < 3)
+            {
+                ChangeTxtToYELLOW();
+                printf("Enter ID of Account You Want To Transfer To : ");
+                scanf("%s" , _ID2);
+                fflush(stdin);
+                Dest_Node = CurrentNode(_ID2);
+                if (NULL == Dest_Node)
+                {
+                    ChangeTxtToRED();
+                    printf("Invalid Destination ID ! ... Try Again \n");
+                    Sleep(2000);
+                    flagDest++ ;
+                }
+                else
+                {
+                    ChangeTxtToYELLOW();
+                    printf("Enter Amount of Money You Want To Transfer : ");
+                    scanf("%i" , &CashToTransfer);
+                    fflush(stdin);
+                    if ( (0 == strcmp(Src_Node->State , "active")) && (0 == strcmp(Dest_Node->State , "active")) )
+                    {
+                        if (CashToTransfer > Src_Node->Balance)
+                        {
+                            ChangeTxtToRED();
+                            printf("Amount of Money You Want To Transfer is More than The Actual Balance ! \n");
+                            Sleep(3000);
+                        }
+                        else
+                        {
+                            ChangeTxtToBLUE();
+                            printf("\nSuccessful Transaction Operation \n");
+                            Src_Node->Balance = Src_Node->Balance-CashToTransfer ;
+                            Dest_Node->Balance = Dest_Node->Balance+CashToTransfer ;
+                            printf("Money Transferd Successfully \n");
+                            printf("---------------------------- \n");
+                            printf("Your New Balance Is \" %u \" \n" , Src_Node->Balance);
+                            Sleep(5000);
+                            break ;
+                        }  
+                    }
+                    else
+                    {
+                        ChangeTxtToRED();
+                        printf("This Account Is Deactivated ! \n");
+                        printf("You Can't Do Any Operation  ! \n");
+                        Sleep(3000);
+                        break;
+                    }
+                    break ;
+                }
+            }
+            break ;
         }
     }
-    
-    while (flagDest != 0)
-    {
-        printf("Enter ID of Account You Want To Transfer To : ");
-        scanf("%s" , _ID);
-        Dest_Node = CurrentNode(_ID);
-        if (NULL == Dest_Node)
-        {
-            printf("Invalid Destination ID ! ... Try Again \n");
-        }
-        else
-        {
-            flagSrc = 0 ;
-        }
-    }
-
-    printf("\nEnter Amount of Money You Want To Transfer : ");
-    scanf("%i" , &CashToTransfer);
-
-    if ( (!strcmp(Src_Node->State , "active")) && (strcmp(Dest_Node->State , "active")) )
-    {
-        if (CashToTransfer > Src_Node->Balance)
-        {
-            printf("Amount of Money You Want To Transfer is More than The Actual Balance ! \n");
-        }
-        else
-        {
-            printf("\nSuccessful Transaction Operation \n");
-            Src_Node->Balance = Src_Node->Balance-CashToTransfer ;
-            Dest_Node->Balance = Dest_Node->Balance+CashToTransfer ;
-            printf("\nMoney Transferd Successfully \n");
-            printf("---------------------------- \n");
-            printf("\nYour New Balance Is \" %u \" \n" , Src_Node->Balance);
-        }
-    }
-    else
-    {
-        printf("This Account Is Deactivated ! \n");
-    }
-    Sleep(5000);
 }
 /* ================================ */
 
@@ -290,39 +380,50 @@ void MakeTransaction(struct Node **Head)
   */
 void AddCash(struct Node **Head)
 {
-    uint8 flag  = 1;
+    ChangeTxtToYELLOW();
+    uint8 flag  = 0;
     uint32 CashToAdd ;
     uint8 _ID[15];
     struct Node *TempNode ;
     
-    while (flag != 0)
+    while (flag < 3)
     {
-        printf("\nEnter Bank ID :");
+        printf("Enter Bank ID : ");
         scanf("%s" , _ID);
+        fflush(stdin);
         TempNode = CurrentNode(_ID);
         if (NULL == TempNode)
         {
+            ChangeTxtToRED();
             printf("Invalid ID ! ... Try Again \n");
+            flag++ ;
         }
         else
         {
-            printf("\nEnter Amount of Money You Want To Add : ");
+            ChangeTxtToYELLOW();
+            flag = 0 ;
+            printf("Enter Amount of Money You Want To Add : ");
             scanf("%i" , &CashToAdd);
-
+            fflush(stdin);
             if ( (!strcmp(TempNode->State , "active"))  )
             {
+                ChangeTxtToGREEN();
                 TempNode->Balance = TempNode->Balance+CashToAdd ;
                 printf("Successful Deposit Operation \n");
                 printf("---------------------------- \n");
-                printf("Your New Balance Is \" %u \" \n" , TempNode->Balance);
+                printf("Your New Balance Is \"%u\" \n" , TempNode->Balance);
+                Sleep(5000);
+                break ;
             }
             else
             {
+                ChangeTxtToRED();
                 printf("This Account Is Deactivated ! \n");
+                printf("You Can't Do Any Operation  ! \n");
+                Sleep(3000);
+                break ;
             }
-            flag = 0 ;
         }
-        Sleep(5000);
     }
 }
 /* ================================ */
@@ -334,38 +435,59 @@ void AddCash(struct Node **Head)
   */
 void GetCash(struct Node **Head)
 {
-    uint8 flag  = 1;
+    ChangeTxtToYELLOW();
+    uint8 flag  = 0;
     uint32 CashToGet ;
     uint8 _ID[15];
     struct Node *TempNode ;
     
-    while (flag != 0)
+    while (flag < 3)
     {
-        printf("Enter Bank ID :");
+        printf("Enter Bank ID : ");
         scanf("%s" , _ID);
+        fflush(stdin);
         TempNode = CurrentNode(_ID);
         if (NULL == TempNode)
         {
+            ChangeTxtToRED();
             printf("Invalid ID ! ... Try Again \n");
+            flag++;
         }
         else
         {
+            ChangeTxtToYELLOW();
+            flag = 0 ;
             printf("Enter Amount of Money You Want To Get : ");
             scanf("%i" , &CashToGet);
-
-            if ( (!strcmp(TempNode->State , "active"))  )
+            fflush(stdin);
+            if ( (0 == strcmp(TempNode->State , "active"))  )
             {
-                TempNode->Balance = TempNode->Balance-CashToGet ;
-                printf("Successful Operation \n");
-                printf("Your New Balance Is \" %u \" \n" , TempNode->Balance);
+                if (CashToGet > TempNode->Balance)
+                {
+                    ChangeTxtToRED();
+                    printf("Amount of Money You Want To Get is More than The Actual Balance ! \n");
+                    Sleep(5000); 
+                    break ;
+                }
+                else
+                {
+                    ChangeTxtToGREEN();
+                    TempNode->Balance = TempNode->Balance-CashToGet ;
+                    printf("Successful Operation \n");
+                    printf("Your New Balance Is \" %u \" \n" , TempNode->Balance);
+                    Sleep(5000);
+                    break ;
+                }
             }
             else
             {
+                ChangeTxtToRED();
                 printf("This Account Is Deactivated ! \n");
+                printf("You Can't Do Any Operation  ! \n");
+                Sleep(3000);
+                break ;
             }
-            flag = 0 ;
         }
-        Sleep(5000);
     }
 }
 /* ================================ */
@@ -377,25 +499,56 @@ void GetCash(struct Node **Head)
   */
 void ChangeState(struct Node **Head)
 {
-    uint8 flag  = 1;
+    uint8 flag  = 0;
+    uint8 flag1 = 0 ;
     uint8 _ID[15];
+    uint8 _State[15];
     struct Node *TempNode ;
-    while (flag != 0)
+    while (3 > flag1)
     {
-        printf("Enter Bank ID :");
+        printf("\nEnter Bank ID : ");
         scanf("%s" , _ID);
+        fflush(stdin);
         TempNode = CurrentNode(_ID);
         if (NULL == TempNode)
         {
             printf("Invalid ID ! ... Try Again \n");
+            flag1++ ;
         }
         else
         {
-            strcpy(TempNode->State, "closed");
-            printf("Account Is Now Deactivated ! \n");
             flag = 0 ;
+            while (flag < 3)
+            {
+                printf("Account Status Is Now %s \n\n" , TempNode->State);
+                printf("Enter New Account Status : [Active - Closed]\n");
+                gets(_State);
+                fflush(stdin);
+                if ( (0 == strcmp(_State , "Closed")) )
+                {
+                    ChangeTxtToRED();
+                    strcpy(TempNode->State, "closed");
+                    printf("Account Is Now Closed ! \n");
+                    Sleep(3000);
+                    break ;
+                }
+                else if ( (0 == strcmp(_State , "Active")) )
+                {
+                    ChangeTxtToGREEN();
+                    strcpy(TempNode->State, "active");
+                    printf("Account Is Now Active ! \n");
+                    Sleep(3000);
+                    break ;
+                }
+                else
+                {
+                    ChangeTxtToRED();
+                    printf("\nThis Status Is Not Available ... Try Again ! \n");
+                    flag++;
+                }
+            }
+            break ;
         }
-        Sleep(5000);
     }
 }
 /* ================================ */
@@ -430,9 +583,10 @@ void CreateNewAcc(struct Node **Head)
         strcpy(TempNode->State, "active");
 
 
-
+        printf("Please Fill Account Information \n");
+        printf("=============================== \n\n");
         fflush(stdin);
-        printf("Enter Name       : ");
+        printf("Enter User Name  : ");
         gets(TempNode->Name);
         
         fflush(stdin);
@@ -441,9 +595,11 @@ void CreateNewAcc(struct Node **Head)
         
         while (flag != 0)
         {
-            printf("Enter Age        : ");
+            ChangeTxtToYELLOW();
+            printf("Enter User Age   : ");
             if( (scanf("%u%c", &TempNode->Age , &term) != 2 ) || (term != '\n') )
             {
+                ChangeTxtToRED();
                 printf("Invaild !! ... Try Again \n");
                 fflush(stdin);
             }
@@ -452,22 +608,24 @@ void CreateNewAcc(struct Node **Head)
                 flag = 0 ;
             }
         }
-
         fflush(stdin);
-
         if (21 > TempNode->Age)
         {
+            ChangeTxtToRED();
+            printf("[Note] !!.. Your Age Is Less Than 21 Year\nYou Have to Enter Guardian National ID \n");
             flag = 1 ;
             while (flag != 0)
             {
-                printf("\nYou have to enter the Guardian National ID \n");
-                printf("============================================= \n");
-                printf("Enter National ID: ");
+                ChangeTxtToYELLOW();
+                printf("Enter Guardian National ID [Must Be 14 Number] : ");
                 scanf("%s" , LocNationalID);
+                fflush(stdin);
                 strcpy(TempNode->G_ID , LocNationalID);
                 if ( 14 != strlen(TempNode->G_ID))
                 {
-                    printf("Invalid National ID ! ... Try Again \n");
+                    ChangeTxtToRED();
+                    printf("Invalid Guardian National ID ! ... Try Again \n");
+                    printf("Guardian National ID [Must Be 14 Number]\n");
                 }
                 else
                 {
@@ -481,12 +639,16 @@ void CreateNewAcc(struct Node **Head)
             flag = 1 ;
             while (flag != 0)
             {
-                printf("Enter National ID: ");
+                ChangeTxtToYELLOW();
+                printf("Enter National ID [Must Be 14 Number] : ");
                 scanf("%s" , LocNationalID);
+                fflush(stdin);
                 strcpy(TempNode->N_ID , LocNationalID);
                 if ( 14 != strlen(TempNode->N_ID))
                 {
+                    ChangeTxtToRED();
                     printf("Invalid National ID ! ... Try Again \n");
+                    printf("National ID [Must Be 14 Number]\n");
                 }
                 else
                 {
@@ -494,9 +656,10 @@ void CreateNewAcc(struct Node **Head)
                 }
             }            
         }
-        printf("Enter Balance    : ");
+        ChangeTxtToYELLOW();
+        printf("Enter The Balance: ");
         scanf("%i" , &TempNode->Balance);
-
+        fflush(stdin);
         // ^Check if there is other users in DataBase or this is first user^
         /* DataBase is Empty */
         if (NULL == *Head)
@@ -516,12 +679,16 @@ void CreateNewAcc(struct Node **Head)
             LastNode->NodeLink = TempNode ;
         }
         system("cls");
-        printf("Account Created Successfully \nAnd This is Account Information: \n");
-        printf("Name         : %s\n" , TempNode->Name);
-        printf("Address      : %s\n" , TempNode->Addr);
-        printf("Account ID   : %s\n" , TempNode->ID);
-        printf("Account Pass : %s\n" , TempNode->Pass);
-        printf("Account State: %s\n" , TempNode->State);
+        printf("Account Created Successfully \nAccount Information \e[1;96m [Save ID & Password For Future Uses]\033[0;33m\n");
+        printf("================================================ \n");
+        printf("Name            : %s\n" , TempNode->Name);
+        printf("Address         : %s\n" , TempNode->Addr);
+        printf("Account ID      : %s\n" , TempNode->ID);
+        printf("Account Pass    : %s\n" , TempNode->Pass);
+        printf("Account Balance : %i\n" , TempNode->Balance);
+        printf("Account State   : %s\n" , TempNode->State);
+        fflush(stdin);
+        fflush(stdout);
     }
     else
     {
@@ -534,94 +701,281 @@ void CreateNewAcc(struct Node **Head)
 
 /**
   * @brief  :   Function to Open Existing Account (Node) from the DataBase (List) 
-  * @param  :   pointer to the address of the head of the list
+  * @param  :   pointer points to the address of the head of the list
   * @retval :   No return 
   */
 void OpenExisting(struct Node **Head)
 {
+    ChangeTxtToYELLOW();
     struct Node *TempNode ;
-    uint8 L1   = 0 ;
-    uint8 L2   = 0 ;
-    uint8 flag = 1;
-    uint8 AdminChiose = 0 ;
+    uint8 L1   = 1 ;
+    uint8 L2   = 1 ;
+    uint8 flag = 0 ;
+    uint8 AdminChiose ;
     uint8 _ID[15];
 
-    while (flag < 4)
+    while (flag < 3)
     {
+        ChangeTxtToYELLOW();
         printf("Enter Bank ID :");
         scanf("%s" , _ID);
+        fflush(stdin);
         TempNode = CurrentNode(_ID);
         if (NULL == TempNode)
         {
+            ChangeTxtToRED();
             printf("Invalid ID ! ... Try Again \n");
+            Sleep(2000);
             flag++ ;
         }
         else
         {
+            ChangeTxtToBLUE();
             system("cls");
-            printf(" ------(Welcome %s )------ \n", TempNode->Name);
-            printf(" --------------------- \n\n");
-            printf("Account ID   : %s\n" , TempNode->ID);
-            printf("Account Pass : %s\n" , TempNode->Pass);
-            printf("Account State: %s\n" , TempNode->State);
-            Sleep(3000);
-            flag = 8 ;
+            printf("------(Welcome to %s 's Account)------ \n", TempNode->Name);
+            printf("--------------------------------------------- \n\n");
+            printf("Account ID      : %s\n" , TempNode->ID);
+            printf("Account Pass    : %s\n" , TempNode->Pass);
+            printf("Account Balance : %i\n" , TempNode->Balance);
+            printf("Account State   : %s\n" , TempNode->State);
+            printf("========================================== \n");
+            Sleep(5000);
+            while (L1)
+            {
+                ChangeTxtToYELLOW();
+                L1 = 1 ;
+                system("cls");
+                printf("------(Welcome to %s 's Account)------ \n", TempNode->Name);
+                printf("--------------------------------------------- \n\n");
+                printf("Press [1] --> To Make Transaction\n");
+                printf("Press [2] --> To Change Account Status\n");
+                printf("Press [3] --> To Get Cash from Account\n");
+                printf("Press [4] --> To Add Cash to Account \n");
+                printf("Press [5] --> To Display Account Info\n");
+                printf("Press [0] --> To Return to main menu \n\n");
+                printf("--------------------------------------\n");
+                printf(">> Your Choise :  ");
+                scanf("%c" , &AdminChiose);
+                fflush(stdin);
+                
+                while (L2)
+                {
+                    if ('1' == AdminChiose)
+                    {
+                        ChangeTxtToYELLOW();
+                        system("cls");
+                        printf("------(Welcome to %s 's Account)------ \n", TempNode->Name);
+                        printf("--------------------------------------------- \n\n");
+                        MakeTransaction(Head) ;
+                        break ;
+                    }
+                    else if ('2' == AdminChiose)
+                    {
+                        ChangeTxtToYELLOW();
+                        system("cls");
+                        printf("------(Welcome to %s 's Account)------ \n", TempNode->Name);
+                        printf("--------------------------------------------- \n\n");
+                        ChangeState(Head) ;
+                        break ;
+                    }
+                    else if ('3' == AdminChiose)
+                    {
+                        ChangeTxtToYELLOW();
+                        system("cls");
+                        printf("------(Welcome to %s 's Account)------ \n", TempNode->Name);
+                        printf("--------------------------------------------- \n\n");
+                        GetCash(Head) ; 
+                        break;
+                    }
+                    else if ('4' == AdminChiose)
+                    {
+                        ChangeTxtToYELLOW();
+                        system("cls");
+                        printf("------(Welcome to %s 's Account)------ \n", TempNode->Name);
+                        printf("--------------------------------------------- \n\n");
+                        AddCash(Head) ; 
+                        break;
+                    }
+                    else if ('5' == AdminChiose)
+                    {
+                        system("cls");
+                        DisplayAcc(TempNode->ID);
+                        break;
+                    }
+                    else if ('0' == AdminChiose)
+                    {
+                        L1 = 0 ;
+                        flag = 8 ;
+                        break;
+                    }
+                    else
+                    {
+                        ChangeTxtToRED();
+                        printf("Invalid Chiose ! ... Try Again \n");
+                        Sleep(2000);
+                        break;
+                    }
+                }
+            } 
         }
     }
-    if (flag == 8)
+ 
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Diplay Account information 
+  * @param  :   pointer to Account ID
+  * @retval :   No return 
+  */
+void DisplayAcc(sint8* u8IDCopy)
+{
+    struct Node *TempNode ;
+    uint8 _ID [15] ;
+    TempNode = CurrentNode(u8IDCopy);
+    ChangeTxtToBLUE();
+    printf("Enter Bank ID :");
+    scanf("%s" , _ID);
+    fflush(stdin);
+    if(0 == (strcmp(TempNode->ID , _ID)))
     {
-        while (1 != L2)
-        {
-            system("cls");
-            printf(" ------(Welcome)------ \n");
-            printf(" --------------------- \n\n");
-            printf(" Press [1] --> To Make Transaction\n");
-            printf(" Press [2] --> To Change Account Status\n");
-            printf(" Press [3] --> To Get Cash \n");
-            printf(" Press [4] --> To Deposit in Account \n");
-            printf(" Press [0] --> To Return to main menu \n\n");
-            printf(" Your Choise :  ");
-            scanf("%u" , &AdminChiose);
-            switch (AdminChiose)
-            {
-                case 1 : MakeTransaction(Head) ; break;
-                case 2 : ChangeState(Head)     ; break;
-                case 3 : GetCash(Head)         ; break;
-                case 4 : AddCash(Head)         ; break;
-                case 0 : L2 = 1 ; L1 = 5;      ; break;
-                default:
-                printf("Invalid Chiose ! ... Try Again \n");
-                break;
-            }
-        } 
+        ChangeTxtToBLUE();
+        printf("\n---------- [%s's Account] ----------\n" , TempNode->Name);
+        printf("-----------------------------------------\n");
+        printf("Name            : %s\n" , TempNode->Name);
+        printf("Address         : %s\n" , TempNode->Addr);
+        printf("Account ID      : %s\n" , TempNode->ID);
+        printf("Account Pass    : %s\n" , TempNode->Pass);
+        printf("Account Balance : %i\n" , TempNode->Balance);
+        printf("Account State   : %s\n" , TempNode->State);
+        printf("============================================\n\n");
+        TempNode = TempNode->NodeLink;
+        Sleep(10000);
     }
     else
     {
-        Sleep(1000);
+        ChangeTxtToRED();
+        printf("\n    .... [No Information To Display] ....\n");
+        Sleep(2000);
     }
+    system("cls");
+}
+
+/**
+  * @brief  :   Function to Diplay All Accounts information 
+  * @param  :   pointer points to the address of the head of the list
+  * @retval :   No return 
+  */
+void DisplayAllAcc(struct Node *Head)
+{
+    struct Node *TempNode = Head;
+
+    system("cls");
+    ChangeTxtToBLUE();
+    printf("-------------- [All Accounts Information] --------------\n");
+    if(NULL == TempNode)
+    {
+        ChangeTxtToRED();
+        printf("\n    .... [No Accounts in System Yet] ....\n");
+        Sleep(5000);
+    }
+    else
+    {
+        ChangeTxtToBLUE();
+        while(TempNode != NULL)
+        {
+            printf("\n---------- [%s's Account] ----------\n" , TempNode->Name);
+            printf("-----------------------------------------\n");
+            printf("Name            : %s\n" , TempNode->Name);
+            printf("Address         : %s\n" , TempNode->Addr);
+            printf("Account ID      : %s\n" , TempNode->ID);
+            printf("Account Pass    : %s\n" , TempNode->Pass);
+            printf("Account Balance : %i\n" , TempNode->Balance);
+            printf("Account State   : %s\n" , TempNode->State);
+            printf("============================================\n\n");
+            TempNode = TempNode->NodeLink;
+        }
+        if(NULL == TempNode)
+        {
+            printf("--------------- [End of List] --------------\n");
+        }
+        Sleep(15000);
+    }
+    system("cls");
+}
+/* ================================ */
+
+/**
+  * @brief  :   Function to Diplay All Accounts information 
+  * @param  :   pointer points to the address of the head of the list
+  * @retval :   No return 
+  */
+void ChangePass(struct Node **Head)
+{
+    ChangeTxtToGREEN();
+    uint8 flag  = 0;
+    uint8 flag1  = 0;
+    uint8 NewPass [20] ;
+    uint8 _ID[15];
+    struct Node *TempNode ;
     
+    while (flag < 3)
+    {
+        ChangeTxtToGREEN();
+        printf("Enter Bank ID  : ");
+        scanf("%s" , _ID);
+        fflush(stdin);
+        TempNode = CurrentNode(_ID);
+        if (NULL == TempNode)
+        {
+            ChangeTxtToRED();
+            printf("Invalid ID ! ... Try Again \n");
+            flag++;
+        }
+        else
+        {
+            if ( (0 == strcmp(TempNode->State , "active")) )
+            {
+                while (3 > flag1)
+                {
+                    ChangeTxtToGREEN();
+                    printf("Enter New Password [Must Be 6 Digits] : ");
+                    gets(NewPass);
+                    fflush(stdin);
+                    if (6 == strlen(NewPass))
+                    {
+                        ChangeTxtToBLUE();
+                        strcpy(TempNode->Pass , NewPass);
+                        printf("Password Changed Successfully \n");
+                        printf("New Password Is : %s \n", TempNode->Pass);
+                        ChangeTxtToRED();
+                        printf("SAVE IT !!.. \n");
+                        ChangeTxtToGREEN();
+                        Sleep(5000);
+                        flag = 8 ;
+                        break ;
+                    }
+                    else
+                    {
+                        ChangeTxtToRED();
+                        printf("Invalid !!.. New Password [Must Be 6 Digits] \n");
+                        flag1++;
+                        Sleep(2000);
+                    }
+                }
+                
+            }
+            else
+            {
+                ChangeTxtToRED();
+                printf("This Account Is Deactivated ! \n");
+                printf("You Can't Do Any Operation  ! \n");
+                Sleep(3000);
+                break ;
+            }
+        }
+    }
 }
 /* ================================ */
 
 
-
-
-
-
-
-
-/* Function used for Debugging */
-void Display_All_Nodes(struct Node **Head)
-{
-    struct Node *TempNode = *Head;
-
-        printf("-> %s  \n", TempNode->Pass);
-        printf("-> %s  \n", TempNode->Name);
-        printf("-> %s  \n", TempNode->Addr);
-        printf("--> %s \n" , TempNode->ID);
-        printf("-> %s  \n", TempNode->State);
-        printf("-> %i  \n", TempNode->Age);
-        printf("-> %i  \n", TempNode->Balance);
-        
-
-}
