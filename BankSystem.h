@@ -18,11 +18,11 @@ struct Node
   /* Data Required */
   uint8   Name[100];
   uint8   Addr[100];
-  uint8   State[10];
-  sint8   ID [15]  ;
-  sint8   Pass [10];
-  uint8   N_ID [15];
-  uint8   G_ID [15];
+  uint8   State[20];
+  sint8   ID [20]  ;
+  sint8   Pass [20];
+  uint8   N_ID [20];
+  uint8   G_ID [20];
   uint8   Age      ;
   uint32  Balance  ;
 
@@ -62,6 +62,22 @@ sint8* AccPass_Gen();
   * @retval :   TempNode --> struct holds the needed Node
   */
 struct Node *CurrentNode(uint8* IDCopy);
+/* ================================ */
+
+/**
+  * @brief  :   Function to Search if Password of Account Found or Not 
+  * @param  :   pointer to the address of the head of the list
+  * @retval :   flag --> Indication if password exisit or not 
+  */
+uint8 IsPassFound(struct Node *Head);
+/* ================================ */
+
+/**
+  * @brief  :   Function to Display Password in Stars Form 
+  * @param  :   No Input
+  * @retval :   PassWord Hidden 
+  */
+// uint8* StarPassword(void);
 /* ================================ */
 
 /**
@@ -111,7 +127,6 @@ void ChangeTxtToBLUE (void);
   */
 void ResetTxtColor (void);
 /* ================================ */
-
 /* ------------------------------------------------------------------------- */
 
 /* =================== [Section: Functions Declarations] =================== */
@@ -173,5 +188,29 @@ void GetCash(struct Node **Head);
 void ChangeState(struct Node **Head);
 /* ================================ */
 
+/**
+  * @brief  :   Function to Diplay All Accounts information 
+  * @param  :   pointer points to the address of the head of the list
+  * @retval :   No return 
+  */
+void DisplayAllAcc(struct Node *Head);
+/* ================================ */
+
+/**
+  * @brief  :   Function to Diplay Account information 
+  * @param  :   pointer to Account ID
+  * @retval :   No return 
+  */
+void DisplayAcc(sint8* u8IDCopy);
+/* ================================ */
+
+/**
+  * @brief  :   Function to Diplay All Accounts information 
+  * @param  :   pointer points to the address of the head of the list
+  * @retval :   No return 
+  */
+void ChangePass(struct Node **Head);
+/* ================================ */
+/* ------------------------------------------------------------------------- */
 
 #endif /* BANKSYSTEM_H_ */
