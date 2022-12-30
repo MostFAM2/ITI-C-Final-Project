@@ -1,7 +1,9 @@
 # ITI-C-Final-Project
 ## This is ITI C-Programming Course Final Project
 
-$\fbox{\color{Green} {Bank Management System}}$
+$\fbox{\color{Green} {Bank Management System}}$     
+**Admin Username :**   Mostafa    
+**Admin Password :**  1234 
 # 
 **This project consist of 2 main features:**
 1. Admin Window.
@@ -36,9 +38,7 @@ To Make Any Operation, Client must use correct Bank Account ID and Password.
 # 
 $\fbox{\color{BabyBlue}{To Check All Featres, Run The Code :}}$   gcc APP.c BankSystem.c
 
-**Admin Username :**   Mostafa
 
-**Admin Password :**  1234
 
 
 
