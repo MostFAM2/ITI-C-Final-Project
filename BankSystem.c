@@ -2,7 +2,7 @@
  *   @File    : BankSystem.c
  *   @Author  : Mostafa Mahmoud
  *   @Date    : 22/12/2022
- *   @Brief   : Implementation of Bank Management System Based on Linked List Data Structure
+ *   @Brief   : Implementation of Bank Management System 
 */
 
 /* ========================== [Section: Includes] ========================== */
