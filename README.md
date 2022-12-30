@@ -35,6 +35,11 @@ To Make Any Operation, Client must use correct Bank Account ID and Password.
 
 # 
 $\fbox{\color{BabyBlue}{To Check All Featres, Run The Code :}}$   gcc APP.c BankSystem.c
+# 
+$\fbox{\color{BabyBlue}{Admin Username :}}$   Mostafa
+# 
+$\fbox{\color{BabyBlue}{Admin Passwor  :}}$   1234
+
 
 
 
